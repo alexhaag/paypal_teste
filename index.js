@@ -23,8 +23,10 @@ app.post("/pay", (req, res) => {
       payment_method: "paypal",
     },
     redirect_urls: {
-      return_url: "http://haag-com-br.umbler.net/views/success",
-      cancel_url: "http://haag-com-br.umbler.net/views/cancel",
+      //return_url: "http://haag-com-br.umbler.net/success",
+      //cancel_url: "http://haag-com-br.umbler.net/cancel",
+      return_url: "http://localhost:3000/success",
+      cancel_url: "http://localhost:3000/cancel",
     },
     transactions: [
       {
@@ -58,9 +60,40 @@ app.post("/pay", (req, res) => {
           res.redirect(payment.links[i].href);
         }
       }
-      res.send();
+      res.send("Opa. Create Payment Response");
     }
   });
 });
+
+app.get("/success", (req, res) => {
+  const paymentInfo = {
+    payerId: req.query.PayerID,
+    paymentID: req.query.paymentID,
+  };
+
+  const execute_payment_json = {
+    payer_id: paymentInfo.payerId,
+    transactions: [
+      {
+        amount: {
+          currency: "BRL",
+          total: "25.00",
+        },
+      },
+    ],
+  };
+
+  paypal.payment.execute(paymentInfo.paymentID, execute_payment_json, function (
+    err,
+    payment
+  ) {
+    if (err) console.error("Erro aqui ----> ", err);
+    console.log("verificar ------> ", payment);
+    res.send("PAGAMENTO EFETUADOOO...!!!!");
+  });
+});
+
+app.get("/cancel", (req, res) => res.send("FOI CANCELADOOO...!!!"));
+
 const port = process.env.PORT || 3000;
 app.listen(3000, () => console.log("Server Started na porta: %s", port));
