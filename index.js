@@ -2,8 +2,6 @@ const express = require("express");
 const ejs = require("ejs");
 const paypal = require("paypal-rest-sdk");
 
-const app = express();
-
 paypal.configure({
   mode: "sandbox", //sandbox or live
   client_id:
@@ -11,6 +9,8 @@ paypal.configure({
   client_secret:
     "ELT18Jc_9LA0fJhognsYHN74bL0_O_73jNrddYoJQYtVhYhL0-3uWZwZC6bRs7ZSszr4bMnwTP7Nu5NW",
 });
+
+const app = express();
 
 app.set("view engine", "ejs");
 
@@ -23,10 +23,8 @@ app.post("/pay", (req, res) => {
       payment_method: "paypal",
     },
     redirect_urls: {
-      return_url: "http://haag-com-br.umbler.net/success",
-      cancel_url: "http://haag-com-br.umbler.net/cancel",
-      //return_url: "http://localhost:3000/success",
-      //cancel_url: "http://localhost:3000/cancel",
+      return_url: "http://localhost:3000/success",
+      cancel_url: "http://localhost:3000/cancel",
     },
     transactions: [
       {
@@ -36,13 +34,13 @@ app.post("/pay", (req, res) => {
               name: "Bicicleta Bala",
               sku: "item",
               price: "25.00",
-              currency: "BRL",
+              currency: "USD",
               quantity: 1,
             },
           ],
         },
         amount: {
-          currency: "BRL",
+          currency: "USD",
           total: "25.00",
         },
         description: "Esta foi considerada a melhor bicicleta do ano.",
@@ -53,14 +51,12 @@ app.post("/pay", (req, res) => {
     if (error) {
       throw error;
     } else {
-      //console.log("Create Payment Response");
-      //console.log(payment);
       for (let i = 0; i < payment.links.length; i++) {
         if (payment.links[i].rel === "approval_url") {
           res.redirect(payment.links[i].href);
         }
       }
-      res.send("Opa. Create Payment Response");
+      res.send("");
     }
   });
 });
@@ -68,7 +64,7 @@ app.post("/pay", (req, res) => {
 app.get("/success", (req, res) => {
   const paymentInfo = {
     payerId: req.query.PayerID,
-    paymentID: req.query.paymentID,
+    paymentId: req.query.paymentId,
   };
 
   const execute_payment_json = {
@@ -76,19 +72,18 @@ app.get("/success", (req, res) => {
     transactions: [
       {
         amount: {
-          currency: "BRL",
+          currency: "USD",
           total: "25.00",
         },
       },
     ],
   };
 
-  paypal.payment.execute(paymentInfo.paymentID, execute_payment_json, function (
+  paypal.payment.execute(paymentInfo.paymentId, execute_payment_json, function (
     err,
     payment
   ) {
     if (err) console.error("Erro aqui ----> ", err);
-    console.log("verificar ------> ", payment);
     res.send("PAGAMENTO EFETUADOOO...!!!!");
   });
 });
