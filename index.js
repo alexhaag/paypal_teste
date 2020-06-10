@@ -62,5 +62,5 @@ app.post("/pay", (req, res) => {
     }
   });
 });
-
-app.listen(3000, () => console.log("Server Started"));
+const port = process.env.PORT || 3000;
+app.listen(3000, () => console.log("Server Started na porta: %s", port));
