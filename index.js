@@ -23,8 +23,8 @@ app.post("/pay", (req, res) => {
       payment_method: "paypal",
     },
     redirect_urls: {
-      return_url: "http://haag-com-br.umbler.net/success",
-      cancel_url: "http://haag-com-br.umbler.net/cancel",
+      return_url: "http://haag-com-br.umbler.net/views/success",
+      cancel_url: "http://haag-com-br.umbler.net/views/cancel",
     },
     transactions: [
       {
