@@ -34,13 +34,13 @@ app.post("/pay", (req, res) => {
               name: "Bicicleta Bala",
               sku: "item",
               price: "25.00",
-              currency: "USD",
+              currency: "BRL",
               quantity: 1,
             },
           ],
         },
         amount: {
-          currency: "USD",
+          currency: "BRL",
           total: "25.00",
         },
         description: "Esta foi considerada a melhor bicicleta do ano.",
@@ -72,7 +72,7 @@ app.get("/success", (req, res) => {
     transactions: [
       {
         amount: {
-          currency: "USD",
+          currency: "BRL",
           total: "25.00",
         },
       },
