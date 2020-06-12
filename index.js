@@ -25,8 +25,8 @@ app.post("/pay", (req, res) => {
     redirect_urls: {
       //return_url: "http://localhost:3000/success",
       //cancel_url: "http://localhost:3000/cancel",
-      return_url: "http://haag-com-br/success",
-      cancel_url: "http://haag-com-br/cancel",
+      return_url: "http://haag.com.br/success",
+      cancel_url: "http://haag.com.br/cancel",
     },
     transactions: [
       {
